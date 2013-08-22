@@ -83,7 +83,7 @@ if exists("b:current_syntax")
   unlet b:current_syntax
 endif
 syn keyword bbShFakeRootFlag    fakeroot contained
-syn match bbShFuncDef           "^\(fakeroot\s*\)\?\([0-9A-Za-z_-]\+\)\(python\)\@<!\(\s*()\s*\)\({\)\@=" contains=bbShFakeRootFlag,bbFunction,bbDelimiter nextgroup=bbShFuncRegion skipwhite
+syn match bbShFuncDef           "^\(fakeroot\s*\)\?\([0-9A-Za-z_${}-]\+\)\(python\)\@<!\(\s*()\s*\)\({\)\@=" contains=bbShFakeRootFlag,bbFunction,bbVarDeref,bbDelimiter nextgroup=bbShFuncRegion skipwhite
 syn region bbShFuncRegion       matchgroup=bbDelimiter start="{\s*$" end="^}\s*$" keepend contained contains=@shell
 
 " Python value inside shell functions
@@ -91,7 +91,7 @@ syn region shDeref         start=+${@+ skip=+\\$+ excludenl end=+}+ contained co
 
 " BitBake python metadata
 syn keyword bbPyFlag            python contained
-syn match bbPyFuncDef           "^\(python\s\+\)\([0-9A-Za-z_-]\+\)\?\(\s*()\s*\)\({\)\@=" contains=bbPyFlag,bbFunction,bbDelimiter nextgroup=bbPyFuncRegion skipwhite 
+syn match bbPyFuncDef           "^\(python\s\+\)\([0-9A-Za-z_${}-]\+\)\?\(\s*()\s*\)\({\)\@=" contains=bbPyFlag,bbFunction,bbVarDeref,bbDelimiter nextgroup=bbPyFuncRegion skipwhite
 syn region bbPyFuncRegion       matchgroup=bbDelimiter start="{\s*$" end="^}\s*$" keepend contained contains=@python
 
 " BitBake 'def'd python functions
