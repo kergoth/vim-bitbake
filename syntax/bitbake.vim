@@ -12,7 +12,7 @@
 "
 " It's an entirely new type, just has specific syntax in shell and python code
 
-if &compatible || v:version < 600
+if &compatible || v:version < 600 || exists("b:loaded_bitbake_plugin")
     finish
 endif
 if exists("b:current_syntax")

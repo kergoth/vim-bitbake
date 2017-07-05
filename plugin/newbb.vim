@@ -10,7 +10,7 @@
 "
 " Will try to use git to find the user name and email
 
-if &compatible || v:version < 600
+if &compatible || v:version < 600 || exists("b:loaded_bitbake_plugin")
     finish
 endif
 
