@@ -6,7 +6,7 @@
 "
 " This sets up the syntax highlighting for BitBake files, like .bb, .bbclass and .inc
 
-if &compatible || version < 600
+if &compatible || version < 600 || exists("b:loaded_bitbake_plugin")
     finish
 endif
 
