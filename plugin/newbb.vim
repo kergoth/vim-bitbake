@@ -48,7 +48,7 @@ fun! NewBBTemplate()
     call BBHeader()
 
     " New the bb template
-    put ='DESCRIPTION = \"\"'
+    put ='SUMMARY = \"\"'
     put ='HOMEPAGE = \"\"'
     put ='LICENSE = \"\"' 
     put ='SECTION = \"\"'
@@ -58,7 +58,7 @@ fun! NewBBTemplate()
 
     " Go to the first place to edit
     0
-    /^DESCRIPTION =/
+    /^SUMMARY =/
     exec "normal 2f\""
 
     if paste == 1
