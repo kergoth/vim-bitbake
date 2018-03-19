@@ -12,6 +12,10 @@ if &compatible || v:version < 600 || exists("b:loaded_bitbake_plugin")
 endif
 
 fun! NewBBAppendTemplate()
+    if line2byte(line('$') + 1) != -1
+        return
+    endif
+
     let l:paste = &paste
     set nopaste
 
@@ -34,7 +38,7 @@ if v:progname =~ "vimdiff"
 endif
 
 augroup NewBBAppend
-    au BufNewFile *.bbappend
+    au BufNewFile,BufReadPost *.bbappend
                 \ if g:bb_create_on_empty |
                 \    call NewBBAppendTemplate() |
                 \ endif

@@ -41,6 +41,10 @@ fun! BBHeader()
 endfun
 
 fun! NewBBTemplate()
+    if line2byte(line('$') + 1) != -1
+        return
+    endif
+
     let l:paste = &paste
     set nopaste
     
@@ -76,7 +80,7 @@ if v:progname =~ "vimdiff"
 endif
 
 augroup NewBB
-    au BufNewFile *.bb
+    au BufNewFile,BufReadPost *.bb
                 \ if g:bb_create_on_empty |
                 \    call NewBBTemplate() |
                 \ endif
