@@ -10,4 +10,4 @@ let b:undo_ftplugin = "setl cms< sts< sw< et< sua<"
 
 setlocal commentstring=#\ %s
 setlocal softtabstop=4 shiftwidth=4 expandtab
-setlocal suffixesadd=.bb,.bbclass
+setlocal suffixesadd+=.bb,.bbclass
