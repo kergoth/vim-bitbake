@@ -41,6 +41,10 @@ fun! BBHeader()
 endfun
 
 fun! NewBBTemplate()
+    if line2byte(line('$') + 1) != -1
+        return
+    endif
+
     let l:paste = &paste
     set nopaste
     
@@ -48,7 +52,7 @@ fun! NewBBTemplate()
     call BBHeader()
 
     " New the bb template
-    put ='DESCRIPTION = \"\"'
+    put ='SUMMARY = \"\"'
     put ='HOMEPAGE = \"\"'
     put ='LICENSE = \"\"' 
     put ='SECTION = \"\"'
@@ -58,7 +62,7 @@ fun! NewBBTemplate()
 
     " Go to the first place to edit
     0
-    /^DESCRIPTION =/
+    /^SUMMARY =/
     exec "normal 2f\""
 
     if paste == 1
@@ -76,7 +80,7 @@ if v:progname =~ "vimdiff"
 endif
 
 augroup NewBB
-    au BufNewFile *.bb
+    au BufNewFile,BufReadPost *.bb
                 \ if g:bb_create_on_empty |
                 \    call NewBBTemplate() |
                 \ endif
