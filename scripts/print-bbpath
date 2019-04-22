@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+#
+# Print the layers in BBLAYERS
+
+import contextlib
+import os
+import pathlib
+import signal
+import sys
+from operator import itemgetter
+
+
+class Terminate(BaseException):
+    pass
+
+
+def sigterm_exception(signum, stackframe):
+    raise Terminate()
+
+
+def setup_command_import(command, relpath='../lib'):
+    """Set up sys.path based on the location of a binary in the PATH """
+    PATH = os.getenv('PATH').split(':')
+    cmd_paths = [os.path.join(path, relpath)
+                for path in PATH if os.path.exists(os.path.join(path, command))]
+    if not cmd_paths:
+        raise ImportError("Unable to locate bb, please ensure PATH is set correctly.")
+
+    sys.path[0:0] = cmd_paths
+
+
+@contextlib.contextmanager
+def status(message, outfile=sys.stderr):
+    """Show the user what we're doing, and whether we succeed"""
+    outfile.write('{0}..'.format(message))
+    outfile.flush()
+    try:
+        yield
+    except KeyboardInterrupt:
+        outfile.write('.interrupted\n')
+        raise
+    except Terminate:
+        outfile.write('.terminated\n')
+        raise
+    except BaseException:
+        outfile.write('.failed\n')
+        raise
+    outfile.write('.done\n')
+
+
+class LayerError(Exception):
+    pass
+
+
+def get_layer_data(layer_path, lconf=None, data=None):
+    if lconf is None:
+        lconf = os.path.join(layer_path, 'conf', 'layer.conf')
+
+    if data is None:
+        ldata = bb.data.init()
+        bb.parse.init_parser(ldata)
+    else:
+        ldata = data.createCopy()
+
+    ldata.setVar('LAYERDIR', layer_path)
+    try:
+        ldata = bb.parse.handle(str(lconf), ldata, include=True)
+    except BaseException as exc:
+        raise LayerError(exc)
+    ldata.expandVarref('LAYERDIR')
+    return ldata
+
+
+def print_layer_data(cmdline_opts):
+    setup_command_import('bitbake')
+    try:
+        import bb
+    except ImportError as exc:
+        sys.exit("Unable to import 'bb' python package: %s" % exc)
+
+    import bb.parse
+    import bb.data
+
+    data = bb.data.init()
+    bb.parse.init_parser(data)
+
+    cwd = pathlib.Path.cwd()
+    for path in [cwd] + list(cwd.parents):
+        bblayers = path / 'conf' / 'bblayers.conf'
+        if bblayers.exists():
+            with status("Parsing {0}".format(bblayers)):
+                try:
+                    ldata = bb.parse.handle(str(bblayers), data)
+                except ImportError as exc:
+                    sys.exit('Unable to parse %s: %s' % (bblayers, exc))
+                else:
+                    break
+    else:
+        sys.exit('Unable to locate conf/bblayers.conf')
+
+    for layer_path in ldata.getVar('BBLAYERS').split():
+        lconf = pathlib.Path(layer_path) / 'conf' / 'layer.conf'
+
+        with status("Parsing {0}".format(lconf)):
+            ldata = get_layer_data(layer_path, lconf, ldata)
+
+    print(ldata.getVar('BBPATH'))
+
+
+if __name__ == '__main__':
+    signal.signal(signal.SIGTERM, sigterm_exception)
+    try:
+        sys.exit(print_layer_data(sys.argv[1:]) or 0)
+    except KeyboardInterrupt:
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+        os.kill(os.getpid(), signal.SIGINT)
+    except Terminate:
+        signal.signal(signal.SIGTERM, signal.SIG_DFL)
+        os.kill(os.getpid(), signal.SIGTERM)
