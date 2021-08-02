@@ -53,7 +53,7 @@ syn keyword bbExportFlag        export contained nextgroup=bbIdentifier skipwhit
 syn match bbIdentifier          "[a-zA-Z0-9\-_\.\/\+]\+" display contained
 syn match bbVarDeref            "${[a-zA-Z0-9\-_\.\/\+]\+}" contained
 syn match bbVarEq               "\(:=\|+=\|=+\|\.=\|=\.\|?=\|??=\|=\)" contained nextgroup=bbVarValue
-syn match bbVarDef              "^\(export\s*\)\?\([a-zA-Z0-9\-_\.\/\+]\+\(_[${}a-zA-Z0-9\-_\.\/\+]\+\)\?\)\s*\(:=\|+=\|=+\|\.=\|=\.\|?=\|??=\|=\)\@=" contains=bbExportFlag,bbIdentifier,bbVarDeref nextgroup=bbVarEq
+syn match bbVarDef              "^\(export\s*\)\?\([a-zA-Z0-9\-_:\.\/\+]\+\(:[${}a-zA-Z0-9\-_:\.\/\+]\+\)\?\)\s*\(:=\|+=\|=+\|\.=\|=\.\|?=\|??=\|=\)\@=" contains=bbExportFlag,bbIdentifier,bbVarDeref nextgroup=bbVarEq
 syn match bbVarValue            ".*$" contained contains=bbString,bbVarDeref,bbVarPyValue
 syn region bbVarPyValue         start=+${@+ skip=+\\$+ end=+}+ contained contains=@python
 
@@ -83,7 +83,7 @@ if exists("b:current_syntax")
   unlet b:current_syntax
 endif
 syn keyword bbShFakeRootFlag    fakeroot contained
-syn match bbShFuncDef           "^\(fakeroot\s*\)\?\([\.0-9A-Za-z_${}\-\.]\+\)\(python\)\@<!\(\s*()\s*\)\({\)\@=" contains=bbShFakeRootFlag,bbFunction,bbVarDeref,bbDelimiter nextgroup=bbShFuncRegion skipwhite
+syn match bbShFuncDef           "^\(fakeroot\s*\)\?\([\.0-9A-Za-z_${}\-\:\.]\+\)\(python\)\@<!\(\s*()\s*\)\({\)\@=" contains=bbShFakeRootFlag,bbFunction,bbVarDeref,bbDelimiter nextgroup=bbShFuncRegion skipwhite
 syn region bbShFuncRegion       matchgroup=bbDelimiter start="{\s*$" end="^}\s*$" contained contains=@shell
 
 " Python value inside shell functions
