@@ -38,7 +38,7 @@ syn keyword bbTodo              COMBAK FIXME TODO XXX contained
 syn match bbComment             "#.*$" contains=@bbCommentGroup
 
 " String helpers
-syn match bbQuote               +['"]+ contained 
+syn match bbQuote               +['"]+ contained
 syn match bbDelimiter           "[(){}=]" contained
 syn match bbArrayBrackets       "[\[\]]" contained
 
@@ -62,7 +62,7 @@ syn match bbVarFlagDef          "^\([a-zA-Z0-9\-_\.]\+\)\(\[[a-zA-Z0-9\-_\.+]\+\
 syn region bbVarFlagFlag        matchgroup=bbArrayBrackets start="\[" end="\]\s*\(:=\|=\|.=\|=.|+=\|=+\|?=\)\@=" contained contains=bbIdentifier nextgroup=bbVarEq
 
 " Includes and requires
-syn keyword bbInclude           inherit include require contained 
+syn keyword bbInclude           inherit include require contained
 syn match bbIncludeRest         ".*$" contained contains=bbString,bbVarDeref
 syn match bbIncludeLine         "^\(inherit\|include\|require\)\s\+" contains=bbInclude nextgroup=bbIncludeRest
 
