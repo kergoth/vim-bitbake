@@ -53,7 +53,7 @@ syn keyword bbExportFlag        export contained nextgroup=bbIdentifier skipwhit
 syn match bbIdentifier          "[a-zA-Z0-9\-_\.\/\+]\+" display contained
 syn match bbVarDeref            "${[a-zA-Z0-9\-_\.\/\+]\+}" contained
 syn match bbVarEq               "\(:=\|+=\|=+\|\.=\|=\.\|?=\|??=\|=\)" contained nextgroup=bbVarValue
-syn match bbVarDef              "^\(export\s*\)\?\([a-zA-Z0-9\-_:\.\/\+]\+\(:[${}a-zA-Z0-9\-_:\.\/\+]\+\)\?\)\s*\(:=\|+=\|=+\|\.=\|=\.\|?=\|??=\|=\)\@=" contains=bbExportFlag,bbIdentifier,bbVarDeref nextgroup=bbVarEq
+syn match bbVarDef              "^\(export\s*\)\?\([a-zA-Z0-9\-_:\.\/\+]\+\([_:][${}a-zA-Z0-9\-_:\.\/\+]\+\)\?\)\s*\(:=\|+=\|=+\|\.=\|=\.\|?=\|??=\|=\)\@=" contains=bbExportFlag,bbIdentifier,bbVarDeref nextgroup=bbVarEq
 syn match bbVarValue            ".*$" contained contains=bbString,bbVarDeref,bbVarPyValue
 syn region bbVarPyValue         start=+${@+ skip=+\\$+ end=+}+ contained contains=@python
 
