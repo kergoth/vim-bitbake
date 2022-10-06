@@ -47,14 +47,14 @@ fun! NewBBTemplate()
 
     let l:paste = &paste
     set nopaste
-    
+
     " Get the header
     call BBHeader()
 
     " New the bb template
     put ='SUMMARY = \"\"'
     put ='HOMEPAGE = \"\"'
-    put ='LICENSE = \"\"' 
+    put ='LICENSE = \"\"'
     put ='SECTION = \"\"'
     put ='DEPENDS = \"\"'
     put =''
@@ -80,7 +80,7 @@ if v:progname =~ "vimdiff"
 endif
 
 augroup NewBB
-    au BufNewFile,BufReadPost *.bb
+    au BufNewFile *.bb
                 \ if g:bb_create_on_empty |
                 \    call NewBBTemplate() |
                 \ endif

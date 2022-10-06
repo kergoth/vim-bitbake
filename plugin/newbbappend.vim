@@ -38,7 +38,7 @@ if v:progname =~ "vimdiff"
 endif
 
 augroup NewBBAppend
-    au BufNewFile,BufReadPost *.bbappend
+    au BufNewFile *.bbappend
                 \ if g:bb_create_on_empty |
                 \    call NewBBAppendTemplate() |
                 \ endif
